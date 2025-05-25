@@ -16,7 +16,8 @@ def generar(gran_total, longitud):
 
         # Elegir número aleatorio dentro del rango válido
         nuevo = random.randint(ini + 1, fin - 1) if fin - ini > 1 else ini
-        numeros.append(nuevo)
+        if nuevo not in numeros:
+            numeros.append(nuevo)
 
         # Agregar nuevos sub-rangos
         rangos.append((ini, nuevo))
@@ -30,6 +31,11 @@ def main():
     parser.add_argument('-l', '--length', type=int, default=4, help='Longitud (ancho) de cada número. Ej: 3 → 000-999')
 
     args = parser.parse_args()
+
+    max_combinaciones = 10 ** args.length
+    if args.quantity > max_combinaciones:
+        parser.error(f"El valor de -q no puede ser mayor a {max_combinaciones} para l={args.length}.")
+
     resultado, longitud = generar(args.quantity, args.length)
 
     for i, n in enumerate(resultado, start=1):
